@@ -35,14 +35,22 @@ class WP_Links_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return bool
+	 * Checks if the current user has permissions to manage links.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return bool Whether the current user can perform AJAX operations for this table.
 	 */
 	public function ajax_user_can() {
 		return current_user_can( 'manage_links' );
 	}
 
 	/**
-	 * @global int    $cat_id  Link category ID.
+	 * Prepares the list of links for displaying.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @global int    $cat_id  Link category ID filter.
 	 * @global string $s       Search string.
 	 * @global string $orderby The field to order the links by.
 	 * @global string $order   The direction to order the links.
@@ -78,6 +86,8 @@ class WP_Links_List_Table extends WP_List_Table {
 
 	/**
 	 * Displays the message for no items.
+	 *
+	 * @since 3.1.0
 	 */
 	public function no_items() {
 		_e( 'No links found.' );
@@ -86,7 +96,9 @@ class WP_Links_List_Table extends WP_List_Table {
 	/**
 	 * Gets the list of bulk actions.
 	 *
-	 * @return array
+	 * @since 3.1.0
+	 *
+	 * @return array<string, string> An associative array of bulk actions.
 	 */
 	protected function get_bulk_actions() {
 		$actions           = array();
@@ -96,7 +108,12 @@ class WP_Links_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @global int $cat_id Link category ID.
+	 * Displays extra controls between bulk actions and pagination.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @global int $cat_id Link category ID filter.
+	 *
 	 * @param string $which The location: 'top' or 'bottom'.
 	 */
 	protected function extra_tablenav( $which ) {
@@ -130,7 +147,11 @@ class WP_Links_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return string[] Array of column titles keyed by their column name.
+	 * Gets an array of column titles keyed by their column name.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return array<string, string> Array of column titles keyed by their column name.
 	 */
 	public function get_columns() {
 		return array(
@@ -147,7 +168,9 @@ class WP_Links_List_Table extends WP_List_Table {
 	/**
 	 * Gets the list of sortable columns.
 	 *
-	 * @return array
+	 * @since 3.1.0
+	 *
+	 * @return array<string, array<int, string|bool>|string> An array of sortable columns.
 	 */
 	protected function get_sortable_columns() {
 		return array(
@@ -295,7 +318,7 @@ class WP_Links_List_Table extends WP_List_Table {
 	 * @since 5.9.0 Renamed `$link` to `$item` to match parent class for PHP 8 named parameter support.
 	 *
 	 * @param object $item        Link object.
-	 * @param string $column_name Current column name.
+	 * @param string $column_name The current column name.
 	 */
 	public function column_default( $item, $column_name ) {
 		// Restores the more descriptive, specific name for use within this method.

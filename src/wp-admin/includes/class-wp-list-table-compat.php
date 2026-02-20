@@ -13,7 +13,21 @@
  * @since 3.1.0
  */
 class _WP_List_Table_Compat extends WP_List_Table {
+
+	/**
+	 * The screen object for this table.
+	 *
+	 * @since 3.1.0
+	 * @var WP_Screen
+	 */
 	public $_screen;
+
+	/**
+	 * The column headers for this table.
+	 *
+	 * @since 3.1.0
+	 * @var array<string, string>
+	 */
 	public $_columns;
 
 	/**
@@ -43,7 +57,7 @@ class _WP_List_Table_Compat extends WP_List_Table {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @return array
+	 * @return array<int, mixed> Column info: columns, hidden columns, sortable columns, and primary column.
 	 */
 	protected function get_column_info() {
 		$columns  = get_column_headers( $this->_screen );
@@ -59,7 +73,7 @@ class _WP_List_Table_Compat extends WP_List_Table {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @return array
+	 * @return array<string, string> Array of column titles keyed by their column name.
 	 */
 	public function get_columns() {
 		return $this->_columns;

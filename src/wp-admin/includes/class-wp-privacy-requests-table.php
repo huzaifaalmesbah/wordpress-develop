@@ -35,7 +35,7 @@ abstract class WP_Privacy_Requests_Table extends WP_List_Table {
 	 *
 	 * @since 4.9.6
 	 *
-	 * @return string[] Array of column titles keyed by their column name.
+	 * @return array<string, string> Array of column titles keyed by their column name.
 	 */
 	public function get_columns() {
 		$columns = array(
@@ -70,7 +70,7 @@ abstract class WP_Privacy_Requests_Table extends WP_List_Table {
 	 *
 	 * @since 4.9.6
 	 *
-	 * @return array Default sortable columns.
+	 * @return array<string, array<int, string|bool>|string> An array of sortable columns.
 	 */
 	protected function get_sortable_columns() {
 		/*
@@ -146,7 +146,7 @@ abstract class WP_Privacy_Requests_Table extends WP_List_Table {
 	 *
 	 * @since 4.9.6
 	 *
-	 * @return string[] An array of HTML links keyed by their view.
+	 * @return array<string, string> An associative array of views.
 	 */
 	protected function get_views() {
 		$current_status = isset( $_REQUEST['filter-status'] ) ? sanitize_text_field( $_REQUEST['filter-status'] ) : '';
@@ -209,7 +209,7 @@ abstract class WP_Privacy_Requests_Table extends WP_List_Table {
 	 *
 	 * @since 4.9.6
 	 *
-	 * @return array Array of bulk action labels keyed by their action.
+	 * @return array<string, string> An associative array of bulk actions.
 	 */
 	protected function get_bulk_actions() {
 		return array(
@@ -412,7 +412,7 @@ abstract class WP_Privacy_Requests_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Returns the markup for the Checkbox column.
+	 * Handles the checkbox column output.
 	 *
 	 * @since 4.9.6
 	 *
@@ -498,13 +498,13 @@ abstract class WP_Privacy_Requests_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Handles the default column.
+	 * Handles the default column output.
 	 *
 	 * @since 4.9.6
 	 * @since 5.7.0 Added `manage_{$this->screen->id}_custom_column` action.
 	 *
 	 * @param WP_User_Request $item        Item being shown.
-	 * @param string          $column_name Name of column being shown.
+	 * @param string          $column_name The current column name.
 	 */
 	public function column_default( $item, $column_name ) {
 		/**
@@ -563,7 +563,7 @@ abstract class WP_Privacy_Requests_Table extends WP_List_Table {
 	public function column_next_steps( $item ) {}
 
 	/**
-	 * Generates content for a single row of the table,
+	 * Generates content for a single row of the table.
 	 *
 	 * @since 4.9.6
 	 *

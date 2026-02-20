@@ -16,12 +16,36 @@
  */
 class WP_Comments_List_Table extends WP_List_Table {
 
+	/**
+	 * Whether to display checkboxes in the list table.
+	 *
+	 * @since 3.1.0
+	 * @var bool
+	 */
 	public $checkbox = true;
 
+	/**
+	 * Number of pending comments for each post.
+	 *
+	 * @since 3.1.0
+	 * @var array<int, int>
+	 */
 	public $pending_count = array();
 
+	/**
+	 * Extra comments to preload for AJAX responses.
+	 *
+	 * @since 3.1.0
+	 * @var WP_Comment[]
+	 */
 	public $extra_items;
 
+	/**
+	 * Whether the current user can edit comments.
+	 *
+	 * @since 3.1.0
+	 * @var bool
+	 */
 	private $user_can;
 
 	/**
@@ -72,7 +96,9 @@ class WP_Comments_List_Table extends WP_List_Table {
 	/**
 	 * Checks if the user can edit posts.
 	 *
-	 * @return bool Whether the user can edit posts.
+	 * @since 3.1.0
+	 *
+	 * @return bool Whether the current user can perform AJAX operations for this table.
 	 */
 	public function ajax_user_can() {
 		return current_user_can( 'edit_posts' );
@@ -80,6 +106,8 @@ class WP_Comments_List_Table extends WP_List_Table {
 
 	/**
 	 * Prepares the comments list items.
+	 *
+	 * @since 3.1.0
 	 *
 	 * @global string $mode           Current list table display mode.
 	 * @global int    $post_id        Current post ID filter.
@@ -205,6 +233,8 @@ class WP_Comments_List_Table extends WP_List_Table {
 	/**
 	 * Gets the number of comments to display per page.
 	 *
+	 * @since 3.1.0
+	 *
 	 * @param string $comment_status Comment status.
 	 * @return int Comments per page.
 	 */
@@ -224,6 +254,9 @@ class WP_Comments_List_Table extends WP_List_Table {
 
 	/**
 	 * Displays a message when no comments are found.
+	 *
+	 * @since 3.1.0
+	 *
 	 * @global string $comment_status The current comment status filter.
 	 */
 	public function no_items() {
@@ -241,11 +274,13 @@ class WP_Comments_List_Table extends WP_List_Table {
 	/**
 	 * Returns an array of comment status links.
 	 *
+	 * @since 3.1.0
+	 *
 	 * @global int    $post_id        The ID of the post to show comments for.
 	 * @global string $comment_status The current comment status.
 	 * @global string $comment_type   The current comment type.
 	 *
-	 * @return array<string, string> Comment status HTML links keyed by view.
+	 * @return array<string, string> An associative array of views.
 	 */
 	protected function get_views() {
 		global $post_id, $comment_status, $comment_type;
@@ -368,9 +403,11 @@ class WP_Comments_List_Table extends WP_List_Table {
 	/**
 	 * Gets the available bulk actions for the comments list.
 	 *
+	 * @since 3.1.0
+	 *
 	 * @global string $comment_status Current comment status filter.
 	 *
-	 * @return array<string, string> Bulk action labels keyed by action name.
+	 * @return array<string, string> An associative array of bulk actions.
 	 */
 	protected function get_bulk_actions() {
 		global $comment_status;
@@ -411,10 +448,12 @@ class WP_Comments_List_Table extends WP_List_Table {
 	/**
 	 * Displays extra controls between bulk actions and pagination.
 	 *
+	 * @since 3.1.0
+	 *
 	 * @global string $comment_status Current comment status.
 	 * @global string $comment_type   Current comment type.
 	 *
-	 * @param string $which The location of the extra table nav markup: Either 'top' or 'bottom'.
+	 * @param string $which The location of the extra table nav: 'top' or 'bottom'.
 	 */
 	protected function extra_tablenav( $which ) {
 		global $comment_status, $comment_type;
@@ -471,7 +510,9 @@ class WP_Comments_List_Table extends WP_List_Table {
 	/**
 	 * Gets the current action selected from the bulk actions dropdown.
 	 *
-	 * @return string|false Current action or false if none.
+	 * @since 3.1.0
+	 *
+	 * @return string|false The action name. False if no action was selected.
 	 */
 	public function current_action() {
 		if ( isset( $_REQUEST['delete_all'] ) || isset( $_REQUEST['delete_all2'] ) ) {
@@ -484,9 +525,11 @@ class WP_Comments_List_Table extends WP_List_Table {
 	/**
 	 * Gets the list of columns.
 	 *
+	 * @since 3.1.0
+	 *
 	 * @global int $post_id The ID of the post comments are being shown for.
 	 *
-	 * @return string[] Array of column titles keyed by their column name.
+	 * @return array<string, string> Array of column titles keyed by their column name.
 	 */
 	public function get_columns() {
 		global $post_id;
@@ -569,7 +612,9 @@ class WP_Comments_List_Table extends WP_List_Table {
 	/**
 	 * Gets a list of sortable columns.
 	 *
-	 * @return array<string, string|array> The sortable columns.
+	 * @since 3.1.0
+	 *
+	 * @return array<string, array<int, string|bool>|string> An array of sortable columns.
 	 */
 	protected function get_sortable_columns() {
 		return array(
@@ -661,6 +706,8 @@ class WP_Comments_List_Table extends WP_List_Table {
 
 	/**
 	 * Generates content for a single row of the table.
+	 *
+	 * @since 3.1.0
 	 *
 	 * @global WP_Post    $post    Global post object.
 	 * @global WP_Comment $comment Global comment object.
@@ -941,8 +988,9 @@ class WP_Comments_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Outputs the checkbox column.
+	 * Handles the checkbox column output.
 	 *
+	 * @since 3.1.0
 	 * @since 5.9.0 Renamed `$comment` to `$item` to match parent class for PHP 8 named parameter support.
 	 *
 	 * @param WP_Comment $item The comment object.
@@ -1147,12 +1195,13 @@ class WP_Comments_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Outputs the default column.
+	 * Handles the default column output.
 	 *
+	 * @since 4.3.0
 	 * @since 5.9.0 Renamed `$comment` to `$item` to match parent class for PHP 8 named parameter support.
 	 *
 	 * @param WP_Comment $item        The comment object.
-	 * @param string     $column_name The custom column's name.
+	 * @param string     $column_name The current column name.
 	 */
 	public function column_default( $item, $column_name ) {
 		// Restores the more descriptive, specific name for use within this method.

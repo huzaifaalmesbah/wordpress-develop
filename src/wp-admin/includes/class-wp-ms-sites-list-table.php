@@ -20,7 +20,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	 * Site status list.
 	 *
 	 * @since 4.3.0
-	 * @var array
+	 * @var array<string, array{0: string, 1: string}>
 	 */
 	public $status_list;
 
@@ -54,7 +54,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @return bool Whether the user can manage sites.
+	 * @return bool Whether the current user can perform AJAX operations for this table.
 	 */
 	public function ajax_user_can() {
 		return current_user_can( 'manage_sites' );
@@ -223,7 +223,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	 *
 	 * @since 5.3.0
 	 *
-	 * @return array
+	 * @return array<string, string> An associative array of views.
 	 */
 	protected function get_views() {
 		$counts = wp_count_sites();
@@ -334,7 +334,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	 *
 	 * @since 5.3.0
 	 *
-	 * @param string $which The location of the extra table nav markup: Either 'top' or 'bottom'.
+	 * @param string $which The location of the extra table nav: 'top' or 'bottom'.
 	 */
 	protected function extra_tablenav( $which ) {
 		?>
@@ -378,7 +378,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @return string[] Array of column titles keyed by their column name.
+	 * @return array<string, string> Array of column titles keyed by their column name.
 	 */
 	public function get_columns() {
 		$sites_columns = array(
@@ -409,7 +409,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @return array<string, mixed> An array of sortable columns.
+	 * @return array<string, array<int, string|bool>|string> An array of sortable columns.
 	 */
 	protected function get_sortable_columns() {
 
@@ -616,7 +616,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	 * @since 5.9.0 Renamed `$blog` to `$item` to match parent class for PHP 8 named parameter support.
 	 *
 	 * @param array  $item        Current site.
-	 * @param string $column_name Current column name.
+	 * @param string $column_name The current column name.
 	 */
 	public function column_default( $item, $column_name ) {
 		// Restores the more descriptive, specific name for use within this method.

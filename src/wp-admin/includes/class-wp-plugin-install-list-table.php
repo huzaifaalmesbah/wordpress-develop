@@ -16,14 +16,44 @@
  */
 class WP_Plugin_Install_List_Table extends WP_List_Table {
 
+	/**
+	 * Sort order for the plugin list. 'ASC' or 'DESC'.
+	 *
+	 * @since 3.1.0
+	 * @var string
+	 */
 	public $order   = 'ASC';
+
+	/**
+	 * The field to order the plugin list by.
+	 *
+	 * @since 3.1.0
+	 * @var string|null
+	 */
 	public $orderby = null;
+
+	/**
+	 * Groups of plugins to display.
+	 *
+	 * @since 3.1.0
+	 * @var string[]
+	 */
 	public $groups  = array();
 
+	/**
+	 * Stored error from the plugins API query, if any.
+	 *
+	 * @since 3.1.0
+	 * @var WP_Error|null
+	 */
 	private $error;
 
 	/**
-	 * @return bool
+	 * Checks the current user's permissions.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return bool Whether the current user can perform AJAX operations for this table.
 	 */
 	public function ajax_user_can() {
 		return current_user_can( 'install_plugins' );
@@ -37,7 +67,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 	 *
 	 * @since 4.9.0
 	 *
-	 * @return array
+	 * @return object[] Map of plugin slugs to their plugin data objects from the updates API.
 	 */
 	protected function get_installed_plugins() {
 		$plugins = array();
@@ -73,18 +103,22 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @return array
+	 * @return string[] Array of installed plugin slugs.
 	 */
 	protected function get_installed_plugin_slugs() {
 		return array_keys( $this->get_installed_plugins() );
 	}
 
 	/**
-	 * @global array  $tabs
-	 * @global string $tab
-	 * @global int    $paged
-	 * @global string $type
-	 * @global string $term
+	 * Prepares the list of items for displaying.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @global array  $tabs   Available plugin installer tabs.
+	 * @global string $tab    Current active tab.
+	 * @global int    $paged  Current page number.
+	 * @global string $type   Current search type.
+	 * @global string $term   Current search term.
 	 */
 	public function prepare_items() {
 		require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
@@ -287,6 +321,9 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Displays a message when no plugins are found.
+	 *
+	 * @since 3.1.0
 	 */
 	public function no_items() {
 		if ( isset( $this->error ) ) {
@@ -307,10 +344,14 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @global array $tabs
-	 * @global string $tab
+	 * Gets the available tabs for the plugin installer.
 	 *
-	 * @return array
+	 * @since 3.1.0
+	 *
+	 * @global array  $tabs Available plugin installer tabs.
+	 * @global string $tab  Current active tab.
+	 *
+	 * @return array<string, string> An associative array of views.
 	 */
 	protected function get_views() {
 		global $tabs, $tab;
@@ -395,9 +436,11 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @global string $tab
+	 * @since 3.1.0
 	 *
-	 * @param string $which
+	 * @global string $tab Current active tab.
+	 *
+	 * @param string $which The location of the table nav: 'top' or 'bottom'.
 	 */
 	protected function display_tablenav( $which ) {
 		if ( 'featured' === $GLOBALS['tab'] ) {
@@ -431,23 +474,33 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return array
+	 * Gets a list of CSS classes for the WP_List_Table table tag.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return string[] Array of CSS classes for the table tag.
 	 */
 	protected function get_table_classes() {
 		return array( 'widefat', $this->_args['plural'] );
 	}
 
 	/**
-	 * @return string[] Array of column titles keyed by their column name.
+	 * Gets the list of columns.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return array<string, string> Array of column titles keyed by their column name.
 	 */
 	public function get_columns() {
 		return array();
 	}
 
 	/**
-	 * @param object $plugin_a
-	 * @param object $plugin_b
-	 * @return int
+	 * @since 3.1.0
+	 *
+	 * @param object $plugin_a First plugin data object to compare.
+	 * @param object $plugin_b Second plugin data object to compare.
+	 * @return int Negative, zero, or positive comparison result.
 	 */
 	private function order_callback( $plugin_a, $plugin_b ) {
 		$orderby = $this->orderby;

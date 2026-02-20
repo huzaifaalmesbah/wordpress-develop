@@ -62,7 +62,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @return bool
+	 * @return bool Whether the current user can perform AJAX operations for this table.
 	 */
 	public function ajax_user_can() {
 		if ( $this->is_site_users ) {
@@ -77,8 +77,8 @@ class WP_Users_List_Table extends WP_List_Table {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @global string $role
-	 * @global string $usersearch
+	 * @global string $role       The current role filter slug.
+	 * @global string $usersearch The current user search term.
 	 */
 	public function prepare_items() {
 		global $role, $usersearch;
@@ -169,7 +169,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	 *
 	 * @global string $role
 	 *
-	 * @return string[] An array of HTML links keyed by their view.
+	 * @return array<string, string> An associative array of views.
 	 */
 	protected function get_views() {
 		global $role;
@@ -266,7 +266,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @return array Array of bulk action labels keyed by their action.
+	 * @return array<string, string> An associative array of bulk actions.
 	 */
 	protected function get_bulk_actions() {
 		$actions = array();
@@ -350,7 +350,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @return string The bulk action required.
+	 * @return string|false The action name. False if no action was selected.
 	 */
 	public function current_action() {
 		if ( isset( $_REQUEST['changeit'] ) ) {
@@ -365,7 +365,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @return string[] Array of column titles keyed by their column name.
+	 * @return array<string, string> Array of column titles keyed by their column name.
 	 */
 	public function get_columns() {
 		$columns = array(
@@ -389,7 +389,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @return array Array of sortable columns.
+	 * @return array<string, array<int, string|bool>|string> An array of sortable columns.
 	 */
 	protected function get_sortable_columns() {
 		$columns = array(

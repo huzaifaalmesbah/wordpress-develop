@@ -16,7 +16,20 @@
  */
 class WP_Themes_List_Table extends WP_List_Table {
 
+	/**
+	 * Current search terms used to filter the theme list.
+	 *
+	 * @since 3.1.0
+	 * @var string[]
+	 */
 	protected $search_terms = array();
+
+	/**
+	 * Theme feature tags used to filter the theme list.
+	 *
+	 * @since 3.1.0
+	 * @var string[]
+	 */
 	public $features        = array();
 
 	/**
@@ -38,7 +51,11 @@ class WP_Themes_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return bool
+	 * Checks the current user's permissions.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return bool Whether the current user can perform AJAX operations for this table.
 	 */
 	public function ajax_user_can() {
 		// Do not check edit_theme_options here. Ajax calls for available themes require switch_themes.
@@ -46,6 +63,9 @@ class WP_Themes_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Prepares the list of items for displaying.
+	 *
+	 * @since 3.1.0
 	 */
 	public function prepare_items() {
 		$themes = wp_get_themes( array( 'allowed' => true ) );
@@ -86,6 +106,9 @@ class WP_Themes_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Displays a message when no themes are found.
+	 *
+	 * @since 3.1.0
 	 */
 	public function no_items() {
 		if ( $this->search_terms || $this->features ) {
@@ -134,7 +157,9 @@ class WP_Themes_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @param string $which
+	 * @since 3.1.0
+	 *
+	 * @param string $which The location of the table nav: 'top' or 'bottom'.
 	 */
 	public function tablenav( $which = 'top' ) {
 		if ( $this->get_pagination_arg( 'total_pages' ) <= 1 ) {
@@ -170,13 +195,18 @@ class WP_Themes_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return string[] Array of column titles keyed by their column name.
+	 * Gets the list of columns.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return array<string, string> Array of column titles keyed by their column name.
 	 */
 	public function get_columns() {
 		return array();
 	}
 
 	/**
+	 * @since 3.1.0
 	 */
 	public function display_rows_or_placeholder() {
 		if ( $this->has_items() ) {
@@ -298,8 +328,10 @@ class WP_Themes_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @param WP_Theme $theme
-	 * @return bool
+	 * @since 3.4.0
+	 *
+	 * @param WP_Theme $theme The theme object to match against search terms and features.
+	 * @return bool Whether the theme matches the current search criteria.
 	 */
 	public function search_theme( $theme ) {
 		// Search the features.
@@ -337,11 +369,11 @@ class WP_Themes_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Send required variables to JavaScript land
+	 * Sends required variables to JavaScript land.
 	 *
 	 * @since 3.4.0
 	 *
-	 * @param array $extra_args
+	 * @param array $extra_args Optional. Additional arguments to pass to the JavaScript variables. Default empty array.
 	 */
 	public function _js_vars( $extra_args = array() ) {
 		$search_string = isset( $_REQUEST['s'] ) ? esc_attr( wp_unslash( $_REQUEST['s'] ) ) : '';

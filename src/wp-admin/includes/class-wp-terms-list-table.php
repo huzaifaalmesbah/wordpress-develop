@@ -16,8 +16,20 @@
  */
 class WP_Terms_List_Table extends WP_List_Table {
 
+	/**
+	 * Arguments passed to the term query callback.
+	 *
+	 * @since 3.1.0
+	 * @var array<string, mixed>
+	 */
 	public $callback_args;
 
+	/**
+	 * Current indentation level for hierarchical term output.
+	 *
+	 * @since 3.1.0
+	 * @var int
+	 */
 	private $level;
 
 	/**
@@ -29,7 +41,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 	 *
 	 * @global string      $post_type Global post type.
 	 * @global string      $taxonomy  Global taxonomy.
-	 * @global string      $action
+	 * @global string      $action    Current action being performed.
 	 * @global WP_Taxonomy $tax       Global taxonomy object.
 	 *
 	 * @param array $args An associative array of arguments.
@@ -66,13 +78,20 @@ class WP_Terms_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return bool
+	 * Checks the current user's permissions.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return bool Whether the current user can perform AJAX operations for this table.
 	 */
 	public function ajax_user_can() {
 		return current_user_can( get_taxonomy( $this->screen->taxonomy )->cap->manage_terms );
 	}
 
 	/**
+	 * Prepares the list of items for displaying.
+	 *
+	 * @since 3.1.0
 	 */
 	public function prepare_items() {
 		$taxonomy = $this->screen->taxonomy;
@@ -154,13 +173,20 @@ class WP_Terms_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Displays a message when no terms are found.
+	 *
+	 * @since 3.1.0
 	 */
 	public function no_items() {
 		echo get_taxonomy( $this->screen->taxonomy )->labels->not_found;
 	}
 
 	/**
-	 * @return array
+	 * Gets the available bulk actions for this table.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return array<string, string> An associative array of bulk actions.
 	 */
 	protected function get_bulk_actions() {
 		$actions = array();
@@ -173,7 +199,11 @@ class WP_Terms_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return string
+	 * Gets the current action selected from the bulk actions dropdown.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return string|false The action name. False if no action was selected.
 	 */
 	public function current_action() {
 		if ( isset( $_REQUEST['action'] ) && isset( $_REQUEST['delete_tags'] ) && 'delete' === $_REQUEST['action'] ) {
@@ -184,7 +214,11 @@ class WP_Terms_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return string[] Array of column titles keyed by their column name.
+	 * Gets the list of columns.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return array<string, string> Array of column titles keyed by their column name.
 	 */
 	public function get_columns() {
 		$columns = array(
@@ -204,7 +238,11 @@ class WP_Terms_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return array
+	 * Gets a list of sortable columns.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return array<string, array<int, string|bool>|string> An associative array of sortable columns.
 	 */
 	protected function get_sortable_columns() {
 		$taxonomy = $this->screen->taxonomy;
@@ -225,6 +263,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * @since 3.1.0
 	 */
 	public function display_rows_or_placeholder() {
 		$taxonomy = $this->screen->taxonomy;
@@ -262,14 +301,18 @@ class WP_Terms_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @param string $taxonomy
-	 * @param array  $terms
-	 * @param array  $children
-	 * @param int    $start
-	 * @param int    $per_page
-	 * @param int    $count
-	 * @param int    $parent_term
-	 * @param int    $level
+	 * Displays rows for terms in a hierarchical taxonomy with paging support.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string      $taxonomy    Taxonomy slug.
+	 * @param WP_Term[]   $terms       Array of term objects to display.
+	 * @param array       $children    Map of parent term IDs to arrays of child terms. Passed by reference.
+	 * @param int         $start       Offset index of the first item to display.
+	 * @param int         $per_page    Number of items to display per page.
+	 * @param int         $count       Running count of displayed terms. Passed by reference.
+	 * @param int         $parent_term ID of the parent term whose children to display.
+	 * @param int         $level       Current indentation level.
 	 */
 	private function _rows( $taxonomy, $terms, &$children, $start, $per_page, &$count, $parent_term = 0, $level = 0 ) {
 
@@ -330,10 +373,14 @@ class WP_Terms_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Generates content for a single row of the table.
+	 *
+	 * @since 3.1.0
+	 *
 	 * @global string $taxonomy Global taxonomy.
 	 *
 	 * @param WP_Term $tag   Term object.
-	 * @param int     $level
+	 * @param int     $level Hierarchical indentation level.
 	 */
 	public function single_row( $tag, $level = 0 ) {
 		global $taxonomy;
@@ -354,10 +401,13 @@ class WP_Terms_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Handles the checkbox column output.
+	 *
+	 * @since 3.1.0
 	 * @since 5.9.0 Renamed `$tag` to `$item` to match parent class for PHP 8 named parameter support.
 	 *
 	 * @param WP_Term $item Term object.
-	 * @return string
+	 * @return string Checkbox column markup, or an empty non-breaking space if the user lacks permission.
 	 */
 	public function column_cb( $item ) {
 		// Restores the more descriptive, specific name for use within this method.
@@ -639,11 +689,14 @@ class WP_Terms_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Handles the default column output.
+	 *
+	 * @since 4.3.0
 	 * @since 5.9.0 Renamed `$tag` to `$item` to match parent class for PHP 8 named parameter support.
 	 *
 	 * @param WP_Term $item        Term object.
-	 * @param string  $column_name Name of the column.
-	 * @return string
+	 * @param string  $column_name The current column name.
+	 * @return string Custom column output.
 	 */
 	public function column_default( $item, $column_name ) {
 		// Restores the more descriptive, specific name for use within this method.
@@ -670,7 +723,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Outputs the hidden row displayed when inline editing
+	 * Outputs the hidden row displayed when inline editing.
 	 *
 	 * @since 3.1.0
 	 */

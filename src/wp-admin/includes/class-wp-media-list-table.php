@@ -19,7 +19,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	 * Holds the number of pending comments for each post.
 	 *
 	 * @since 4.4.0
-	 * @var array
+	 * @var array<int, int>
 	 */
 	protected $comment_pending_count = array();
 
@@ -69,7 +69,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	 *
 	 * @since 3.1.0
 	 *
-	 * @return bool Whether the user can upload files.
+	 * @return bool Whether the current user can perform AJAX operations for this table.
 	 */
 	public function ajax_user_can() {
 		return current_user_can( 'upload_files' );
@@ -143,7 +143,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	 *
 	 * @global array $post_mime_types       An array of post mime types.
 	 * @global array $avail_post_mime_types An array of available post mime types.
-	 * @return array<string, string> An array of links for the available views.
+	 * @return array<string, string> An associative array of views.
 	 */
 	protected function get_views() {
 		global $post_mime_types, $avail_post_mime_types;
@@ -198,6 +198,10 @@ class WP_Media_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Gets an associative array of bulk actions available on this table.
+	 *
+	 * @since 3.1.0
+	 *
 	 * @return array<string, string> An associative array of bulk actions.
 	 */
 	protected function get_bulk_actions() {
@@ -255,7 +259,11 @@ class WP_Media_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return string|false The current action.
+	 * Gets the current action selected from the bulk actions dropdown.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return string|false The action name. False if no action was selected.
 	 */
 	public function current_action() {
 		if ( isset( $_REQUEST['found_post_id'] ) && isset( $_REQUEST['media'] ) ) {
@@ -274,7 +282,11 @@ class WP_Media_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return bool Whether the list table has items to display.
+	 * Checks whether the table has items to display.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return bool Whether the table has items to display.
 	 */
 	public function has_items() {
 		return have_posts();
@@ -359,7 +371,11 @@ class WP_Media_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return string[] Array of column titles keyed by their column name.
+	 * Gets the list of columns.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return array<string, string> Array of column titles keyed by their column name.
 	 */
 	public function get_columns() {
 		$posts_columns       = array();
@@ -424,7 +440,11 @@ class WP_Media_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return array<string, array<int, mixed>> An array of sortable columns.
+	 * Gets an array of sortable columns.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return array<string, array<int, string|bool>|string> An associative array of sortable columns.
 	 */
 	protected function get_sortable_columns() {
 		return array(
@@ -690,7 +710,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	 * @since 5.9.0 Renamed `$post` to `$item` to match parent class for PHP 8 named parameter support.
 	 *
 	 * @param WP_Post $item        The current WP_Post object.
-	 * @param string  $column_name Current column name.
+	 * @param string  $column_name The current column name.
 	 */
 	public function column_default( $item, $column_name ) {
 		// Restores the more descriptive, specific name for use within this method.

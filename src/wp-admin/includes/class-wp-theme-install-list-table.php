@@ -16,21 +16,35 @@
  */
 class WP_Theme_Install_List_Table extends WP_Themes_List_Table {
 
+	/**
+	 * Theme feature filter list.
+	 *
+	 * @since 3.1.0
+	 * @var string[]
+	 */
 	public $features = array();
 
 	/**
-	 * @return bool Whether the user can install themes.
+	 * Checks if the current user has permissions to install themes.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return bool Whether the current user can perform AJAX operations for this table.
 	 */
 	public function ajax_user_can() {
 		return current_user_can( 'install_themes' );
 	}
 
 	/**
-	 * @global array  $tabs
-	 * @global string $tab
-	 * @global int    $paged
-	 * @global string $type
-	 * @global array  $theme_field_defaults
+	 * Prepares the list of installable themes for display.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @global array  $tabs                Theme install tabs.
+	 * @global string $tab                 Current install tab.
+	 * @global int    $paged               Current page number.
+	 * @global string $type                Type of search.
+	 * @global array  $theme_field_defaults Theme API query field defaults.
 	 */
 	public function prepare_items() {
 		require ABSPATH . 'wp-admin/includes/theme-install.php';
@@ -171,15 +185,23 @@ class WP_Theme_Install_List_Table extends WP_Themes_List_Table {
 	}
 
 	/**
+	 * Displays a message when no themes are found.
+	 *
+	 * @since 3.1.0
 	 */
 	public function no_items() {
 		_e( 'No themes match your request.' );
 	}
 
 	/**
-	 * @global array $tabs
-	 * @global string $tab
-	 * @return array<string, string> An array of links for the available views.
+	 * Gets an array of links for the available views on this table.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @global array  $tabs Theme install tabs.
+	 * @global string $tab  Current install tab.
+	 *
+	 * @return array<string, string> An associative array of views.
 	 */
 	protected function get_views() {
 		global $tabs, $tab;
@@ -416,6 +438,8 @@ class WP_Theme_Install_List_Table extends WP_Themes_List_Table {
 	 * Prints the wrapper for the theme installer with a provided theme's data.
 	 * Used to make the theme installer work for no-js.
 	 *
+	 * @since 3.4.0
+	 *
 	 * @param stdClass $theme A WordPress.org Theme API object.
 	 */
 	public function theme_installer_single( $theme ) {
@@ -530,11 +554,11 @@ class WP_Theme_Install_List_Table extends WP_Themes_List_Table {
 	}
 
 	/**
-	 * Send required variables to JavaScript land
+	 * Sends required variables to JavaScript land.
 	 *
 	 * @since 3.4.0
 	 *
-	 * @global string $tab  Current tab within Themes->Install screen
+	 * @global string $tab  Current tab within Themes->Install screen.
 	 * @global string $type Type of search.
 	 *
 	 * @param array $extra_args Unused.

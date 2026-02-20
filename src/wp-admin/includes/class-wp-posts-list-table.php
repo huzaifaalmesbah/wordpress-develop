@@ -28,7 +28,7 @@ class WP_Posts_List_Table extends WP_List_Table {
 	 * Holds the number of pending comments for each post.
 	 *
 	 * @since 3.1.0
-	 * @var array
+	 * @var array<int, int> Map of post IDs to their pending comment count.
 	 */
 	protected $comment_pending_count;
 
@@ -48,6 +48,12 @@ class WP_Posts_List_Table extends WP_List_Table {
 	 */
 	private $sticky_posts_count = 0;
 
+	/**
+	 * Whether the current view is for trashed posts.
+	 *
+	 * @since 3.1.0
+	 * @var bool
+	 */
 	private $is_trash;
 
 	/**
@@ -139,17 +145,25 @@ class WP_Posts_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return bool
+	 * Checks the current user's permissions.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return bool Whether the current user can perform AJAX operations for this table.
 	 */
 	public function ajax_user_can() {
 		return current_user_can( get_post_type_object( $this->screen->post_type )->cap->edit_posts );
 	}
 
 	/**
+	 * Prepares the list of items for displaying.
+	 *
+	 * @since 3.1.0
+	 *
 	 * @global string   $mode             List table view mode.
-	 * @global array    $avail_post_stati
+	 * @global string[] $avail_post_stati Post statuses available for the current post type.
 	 * @global WP_Query $wp_query         WordPress Query object.
-	 * @global int      $per_page
+	 * @global int      $per_page         Number of posts to show per page.
 	 */
 	public function prepare_items() {
 		global $mode, $avail_post_stati, $wp_query, $per_page;
@@ -209,13 +223,20 @@ class WP_Posts_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return bool
+	 * Checks whether the table has items to display.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return bool Whether the table has items to display.
 	 */
 	public function has_items() {
 		return have_posts();
 	}
 
 	/**
+	 * Displays a message when no posts are found.
+	 *
+	 * @since 3.1.0
 	 */
 	public function no_items() {
 		if ( isset( $_REQUEST['post_status'] ) && 'trash' === $_REQUEST['post_status'] ) {
@@ -282,9 +303,11 @@ class WP_Posts_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @global array $locked_post_status This seems to be deprecated.
-	 * @global array $avail_post_stati
-	 * @return array
+	 * @since 3.1.0
+	 *
+	 * @global array    $locked_post_status This seems to be deprecated.
+	 * @global string[] $avail_post_stati   Post statuses available for the current post type.
+	 * @return array<string, string> An associative array of views.
 	 */
 	protected function get_views() {
 		global $locked_post_status, $avail_post_stati;
@@ -427,7 +450,11 @@ class WP_Posts_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return array
+	 * Gets the available bulk actions for this table.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return array<string, string> An associative array of bulk actions.
 	 */
 	protected function get_bulk_actions() {
 		$actions       = array();
@@ -562,7 +589,11 @@ class WP_Posts_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @param string $which
+	 * Displays extra controls between bulk actions and pagination.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $which The location of the extra table nav: 'top' or 'bottom'.
 	 */
 	protected function extra_tablenav( $which ) {
 		?>
@@ -620,7 +651,11 @@ class WP_Posts_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return string
+	 * Gets the current action selected from the bulk actions dropdown.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return string|false The action name. False if no action was selected.
 	 */
 	public function current_action() {
 		if ( isset( $_REQUEST['delete_all'] ) || isset( $_REQUEST['delete_all2'] ) ) {
@@ -631,9 +666,13 @@ class WP_Posts_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Gets a list of CSS classes for the WP_List_Table table tag.
+	 *
+	 * @since 3.1.0
+	 *
 	 * @global string $mode List table view mode.
 	 *
-	 * @return array
+	 * @return string[] Array of CSS classes for the table tag.
 	 */
 	protected function get_table_classes() {
 		global $mode;
@@ -650,7 +689,11 @@ class WP_Posts_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return string[] Array of column titles keyed by their column name.
+	 * Gets the list of columns.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return array<string, string> Array of column titles keyed by their column name.
 	 */
 	public function get_columns() {
 		$post_type = $this->screen->post_type;
@@ -756,7 +799,11 @@ class WP_Posts_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @return array
+	 * Gets a list of sortable columns.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @return array<string, array<int, string|bool>|string> An associative array of sortable columns.
 	 */
 	protected function get_sortable_columns() {
 
@@ -794,10 +841,10 @@ class WP_Posts_List_Table extends WP_List_Table {
 	 * @since 3.1.0
 	 *
 	 * @global WP_Query $wp_query WordPress Query object.
-	 * @global int      $per_page
+	 * @global int      $per_page Number of posts to show per page.
 	 *
-	 * @param array $posts
-	 * @param int   $level
+	 * @param WP_Post[] $posts Array of post objects to display.
+	 * @param int       $level Hierarchical indentation level.
 	 */
 	public function display_rows( $posts = array(), $level = 0 ) {
 		global $wp_query, $per_page;
@@ -816,8 +863,12 @@ class WP_Posts_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * @param array $posts
-	 * @param int   $level
+	 * Generates the list table rows for a flat (non-hierarchical) post list.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param WP_Post[] $posts Array of post objects to display.
+	 * @param int       $level Hierarchical indentation level.
 	 */
 	private function _display_rows( $posts, $level = 0 ) {
 		$post_type = $this->screen->post_type;
@@ -842,9 +893,9 @@ class WP_Posts_List_Table extends WP_List_Table {
 	/**
 	 * @global wpdb    $wpdb WordPress database abstraction object.
 	 * @global WP_Post $post Global post object.
-	 * @param array $pages
-	 * @param int   $pagenum
-	 * @param int   $per_page
+	 * @param WP_Post[] $pages    Array of page post objects to display.
+	 * @param int       $pagenum  Current page number.
+	 * @param int       $per_page Number of items to display per page.
 	 */
 	private function _display_rows_hierarchical( $pages, $pagenum = 1, $per_page = 20 ) {
 		global $wpdb;
@@ -948,13 +999,13 @@ class WP_Posts_List_Table extends WP_List_Table {
 	 * @since 3.1.0 (Standalone function exists since 2.6.0)
 	 * @since 4.2.0 Added the `$to_display` parameter.
 	 *
-	 * @param array $children_pages
-	 * @param int   $count
-	 * @param int   $parent_page
-	 * @param int   $level
-	 * @param int   $pagenum
-	 * @param int   $per_page
-	 * @param array $to_display List of pages to be displayed. Passed by reference.
+	 * @param WP_Post[][] $children_pages  Multi-dimensional array of child pages keyed by parent post ID.
+	 * @param int         $count           Running count of displayed pages. Passed by reference.
+	 * @param int         $parent_page     ID of the parent page whose children to display.
+	 * @param int         $level           Current indentation level.
+	 * @param int         $pagenum         Current page number.
+	 * @param int         $per_page        Number of items per page.
+	 * @param array       $to_display      List of pages to be displayed. Passed by reference.
 	 */
 	private function _page_rows( &$children_pages, &$count, $parent_page, $level, $pagenum, $per_page, &$to_display ) {
 		if ( ! isset( $children_pages[ $parent_page ] ) ) {
@@ -1066,10 +1117,10 @@ class WP_Posts_List_Table extends WP_List_Table {
 	/**
 	 * @since 4.3.0
 	 *
-	 * @param WP_Post $post
-	 * @param string  $classes
-	 * @param string  $data
-	 * @param string  $primary
+	 * @param WP_Post $post    The current WP_Post object.
+	 * @param string  $classes Space-separated CSS classes for the cell.
+	 * @param string  $data    Data attributes for the cell.
+	 * @param string  $primary Name of the primary column.
 	 */
 	protected function _column_title( $post, $classes, $data, $primary ) {
 		echo '<td class="' . $classes . ' page-title" ', $data, '>';
@@ -1410,10 +1461,14 @@ class WP_Posts_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Generates content for a single row of the table.
+	 *
+	 * @since 3.1.0
+	 *
 	 * @global WP_Post $post Global post object.
 	 *
-	 * @param int|WP_Post $post
-	 * @param int         $level
+	 * @param int|WP_Post $post  Post ID or post object.
+	 * @param int         $level Hierarchical indentation level.
 	 */
 	public function single_row( $post, $level = 0 ) {
 		$global_post = get_post();
@@ -1610,7 +1665,7 @@ class WP_Posts_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Outputs the hidden row displayed when inline editing
+	 * Outputs the hidden row displayed when inline editing.
 	 *
 	 * @since 3.1.0
 	 *
