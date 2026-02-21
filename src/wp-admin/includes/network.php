@@ -197,6 +197,8 @@ function network_step1( $errors = false ) {
 		$subdomain_install = true;
 	} else {
 		$subdomain_install = false;
+		$message           = '';
+		$message_class     = '';
 		$got_mod_rewrite   = got_mod_rewrite();
 		if ( $got_mod_rewrite ) { // Dangerous assumptions.
 			$message_class = 'updated';

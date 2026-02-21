@@ -6,6 +6,8 @@
  * @subpackage Administration
  */
 
+global $menu, $submenu;
+
 if ( is_network_admin() ) {
 
 	/**
